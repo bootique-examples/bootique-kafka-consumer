@@ -40,7 +40,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>io.bootique.kafka</groupId>
+			<groupId>io.bootique.kafka.client</groupId>
 			<artifactId>bootique-kafka-client</artifactId>
 		</dependency>
 		<dependency>
