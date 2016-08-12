@@ -12,8 +12,10 @@ import io.bootique.kafka.client.consumer.ConsumerConfig;
 import io.bootique.log.BootLogger;
 import io.bootique.shutdown.ShutdownManager;
 import org.apache.kafka.clients.consumer.Consumer;
+import org.apache.kafka.clients.consumer.ConsumerRebalanceListener;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.apache.kafka.common.TopicPartition;
 import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +32,7 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerCommand.class);
 
     private static final String TOPIC_OPT = "topic";
+    private static final String REWIND_OPT = "rewind";
     private static final String BOOTSTRAP_SERVER_OPT = "bootstrap-server";
 
     private static final String DEFAULT_CLUSTER_NAME = "default";
@@ -41,10 +44,15 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
 
     @Inject
     public KafkaConsumerCommand(Provider<KafkaClientFactory> kafkaProvider, BootLogger bootLogger, ShutdownManager shutdownManager) {
-        super(CommandMetadata.builder("consumer").addOption(topicOption()).addOption(clusterOption()));
+        super(CommandMetadata.builder("consumer").addOption(topicOption()).addOption(clusterOption()).addOption(rewindOption()));
         this.kafkaProvider = kafkaProvider;
         this.bootLogger = bootLogger;
         this.shutdownManager = shutdownManager;
+    }
+
+    private static CliOption rewindOption() {
+        return CliOption.builder(REWIND_OPT)
+                .description("Whether to rewind offsets for each consumed partition to the beginning of the queue.").build();
     }
 
     private static CliOption topicOption() {
@@ -74,6 +82,7 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
                 .bootstrapServers(cli.optionStrings(BOOTSTRAP_SERVER_OPT))
                 .build();
 
+        boolean rewind = cli.hasOption(REWIND_OPT);
         Consumer<byte[], String> consumer = kafkaProvider.get().createConsumer(DEFAULT_CLUSTER_NAME, config);
 
         try {
@@ -86,7 +95,8 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
 
             LOGGER.info("Will consume topics: " + topics);
 
-            consumer.subscribe(topics);
+            consumer.subscribe(topics, new RebalanceListener(consumer, rewind));
+
             while (true) {
                 ConsumerRecords<byte[], String> records = consumer.poll(1000);
                 for (ConsumerRecord<byte[], String> r : records) {
@@ -101,5 +111,33 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
         }
 
         return CommandOutcome.succeeded();
+    }
+
+    class RebalanceListener implements ConsumerRebalanceListener {
+
+        private Consumer<byte[], String> consumer;
+        private boolean rewind;
+
+        public RebalanceListener(Consumer<byte[], String> consumer, boolean rewind) {
+            this.consumer = consumer;
+            this.rewind = rewind;
+        }
+
+        @Override
+        public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
+            LOGGER.info("Partitions revoked: " + partitions);
+        }
+
+        @Override
+        public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+            LOGGER.info("Partitions assigned: " + partitions);
+
+            // TODO: if rebalancing occurs because another consumer joins the group, this event is fired for the
+            // already consumed partition. We probably should not jump to the start again
+            if (rewind) {
+                LOGGER.info("Will rewind " + partitions);
+                consumer.seekToBeginning(partitions);
+            }
+        }
     }
 }
