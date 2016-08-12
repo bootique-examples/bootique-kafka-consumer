@@ -2,8 +2,8 @@ package io.bootique.example.kafka.consumer;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
-import com.nhl.bootique.BQCoreModule;
-import com.nhl.bootique.Bootique;
+import io.bootique.BQCoreModule;
+import io.bootique.Bootique;
 
 /**
  * Main app class.
