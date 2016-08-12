@@ -11,7 +11,7 @@ import io.bootique.Bootique;
 public class App implements Module {
 
     public static void main(String[] args) {
-        Bootique.app(args).autoLoadModules().module(App.class).run();
+        Bootique.app("--config=classpath:defaults.yml").args(args).autoLoadModules().module(App.class).run();
     }
 
     @Override

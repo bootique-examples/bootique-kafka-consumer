@@ -1,0 +1,4 @@
+log:
+  appenders:
+    - target: stderr
+      logFormat: '%highlight(%-5p) %blue([%d{ISO8601,UTC}] %thread %c{20}): %m%n%rEx'
