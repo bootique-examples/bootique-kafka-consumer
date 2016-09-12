@@ -16,10 +16,7 @@ public class App implements Module {
 
     @Override
     public void configure(Binder binder) {
-
-        // TODO: use ImplicitCommandLine strategy when this becomes available:
-        // https://github.com/nhl/bootique/issues/26
-        BQCoreModule.contributeCommands(binder).addBinding().to(KafkaConsumerCommand.class);
+        BQCoreModule.setDefaultCommand(binder, KafkaConsumerCommand.class);
     }
 
 
