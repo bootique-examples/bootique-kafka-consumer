@@ -30,7 +30,7 @@ public class App implements Module {
 
     private static OptionMetadata verboseOption() {
         return OptionMetadata.builder(VERBOSE_OPT)
-                .description("If enabled, Kafka client will prints extra debugging information to STDOUT.").build();
+                .description("If enabled, Kafka client will print extra debugging information to STDOUT.").build();
     }
 
     @Override
