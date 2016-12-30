@@ -8,7 +8,7 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import io.bootique.BQCoreModule;
 import io.bootique.Bootique;
-import io.bootique.application.OptionMetadata;
+import io.bootique.meta.application.OptionMetadata;
 import io.bootique.cli.Cli;
 
 import java.lang.annotation.ElementType;
