@@ -35,7 +35,7 @@ public class App implements Module {
 
     @Override
     public void configure(Binder binder) {
-        BQCoreModule.extend(binder).addCommand(KafkaConsumerCommand.class).addOption(verboseOption());
+        BQCoreModule.extend(binder).setDefaultCommand(KafkaConsumerCommand.class).addOption(verboseOption());
 
         // TODO: perhaps we'll invent less verbose API for conditional setting of log levels per
         // https://github.com/bootique/bootique/issues/101
