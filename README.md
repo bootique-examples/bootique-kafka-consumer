@@ -24,31 +24,28 @@ Here is how to build it:
 
 Now you can check the options available in your app:
 
-    java -jar target/bootique-kafka-consumer-0.0.1-SNAPSHOT.jar --help
-
-	Option                                              Description
-    ------                                              -----------
-    -b host:port, --bootstrap-server=host:port          Single Kafka bootstrap server. Can be specified multiple times.
-                                                        Optional. If omitted, will be read from YAML or environment variable
-                                                        BQ_KAFKACLIENT_BOOTSTRAPSERVERS_DEFAULT.
-
-    --config=yaml_location                              Specifies YAML config location, which can be a file path or a URL.
-
-    --consumer
-
-    -h, --help                                          Prints this message.
-
-    -H, --help-config                                   Prints information about application modules and their configuration
-                                                            options.
-
-    -r, --rewind                                        Whether to rewind offsets for each consumed partition to the
-                                                            beginning of the queue.
-
-    -t topic_name, --topic=topic_name                   Kafka topic to consume. Can be specified multiple times.
-
-    -v, --verbose                                       If enabled, Kafka client will print extra debugging information to
-                                                            STDOUT.
+    NAME
+          bootique-kafka-consumer-0.0.1-SNAPSHOT.jar
     
+    OPTIONS
+          -b host:port, --bootstrap=host:port
+               Single Kafka bootstrap server.
+    
+          -c yaml_location, --config=yaml_location
+               Specifies YAML config location, which can be a file path or a URL.
+    
+          -h, --help
+               Prints this message.
+    
+          -H, --help-config
+               Prints information about application modules and their configuration options.
+    
+          -t topic_name, --topic=topic_name
+               Kafka topic to consume. Can be specified multiple times.
+    
+          -v, --verbose
+               If enabled, Kafka client will print extra debugging information to STDOUT.
+        
     
 To test this example, you will need a Kafka broker running release 0.10.0.0 and a topic with some string data to consume. 
 Run Zookeeper and Kafka broker both on localhost from Kafka root directory:
@@ -59,7 +56,7 @@ Run Zookeeper and Kafka broker both on localhost from Kafka root directory:
 
 Run the consumer:
 
-    java -jar target/bootique-kafka-consumer-0.0.1-SNAPSHOT.jar --bootstrap-server=localhost:9092 --topic=topic --verbose
+    java -jar target/bootique-kafka-consumer-0.0.1-SNAPSHOT.jar --bootstrap=localhost:9092 --topic=topic --verbose
 
 Run kafka-verifiable-producer.sh script to write a bunch of string data to a topic from Kafka root directory:
     

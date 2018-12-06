@@ -1,0 +1,6 @@
+log:
+  loggers:
+    org.apache.kafka:
+      level: info
+    io.bootique:
+      level: info

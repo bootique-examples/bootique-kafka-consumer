@@ -11,7 +11,6 @@ import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
 import io.bootique.log.BootLogger;
 
-import io.bootique.shutdown.ShutdownManager;
 import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,6 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
     private static final Logger LOGGER = LoggerFactory.getLogger(KafkaConsumerCommand.class);
 
     private static final String TOPIC_OPT = "topic";
-    private static final String BOOTSTRAP_SERVER_OPT = "bootstrap-server";
     private static final String DEFAULT_GROUP_NAME = "bootique-consumer";
 
     private Provider<KafkaConsumerFactory> kafkaProvider;
@@ -39,7 +37,6 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
     public KafkaConsumerCommand(Provider<KafkaConsumerFactory> kafkaProvider, BootLogger bootLogger) {
         super(CommandMetadata.builder("consumer")
                 .addOption(topicOption())
-                .addOption(clusterOption())
         );
         this.kafkaProvider = kafkaProvider;
         this.bootLogger = bootLogger;
@@ -48,13 +45,6 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
     private static OptionMetadata topicOption() {
         return OptionMetadata.builder(TOPIC_OPT).description("Kafka topic to consume. Can be specified multiple times.")
                 .valueRequired("topic_name").build();
-    }
-
-    private static OptionMetadata clusterOption() {
-        return OptionMetadata.builder(BOOTSTRAP_SERVER_OPT).description("Single Kafka bootstrap server. " +
-                "Optional. " +
-                "If omitted, will be read from YAML or environment variable BQ_KAFKACLIENT_BOOTSTRAPSERVERS_DEFAULT.")
-                .valueRequired("host:port").build();
     }
 
     @Override
@@ -69,7 +59,7 @@ public class KafkaConsumerCommand extends CommandWithMetadata {
                 .charValueConsumer()
                 .autoCommit(true)
                 .group(DEFAULT_GROUP_NAME)
-                .cluster(cli.optionString(BOOTSTRAP_SERVER_OPT))
+                .cluster(App.DEFAULT_CLUSTER_NAME)
                 .topics(topics.toArray(new String[0]))
                 .pollInterval(Duration.ofSeconds(1))
                 .create();

@@ -13,6 +13,8 @@ import java.util.logging.Level;
  */
 public class App implements Module {
 
+    static final String DEFAULT_CLUSTER_NAME = "default_cluster";
+    private static final String BOOTSTRAP_SERVER_OPT = "bootstrap";
     private static final String VERBOSE_OPT = "verbose";
 
     public static void main(String[] args) {
@@ -26,17 +28,25 @@ public class App implements Module {
 
     private static OptionMetadata verboseOption() {
         return OptionMetadata.builder(VERBOSE_OPT)
-                .valueOptionalWithDefault("INFO")
                 .description("If enabled, Kafka client will print extra debugging information to STDOUT.").build();
+    }
+
+    private static OptionMetadata bootstrapOption() {
+        return OptionMetadata
+                .builder(BOOTSTRAP_SERVER_OPT)
+                .description("Single Kafka bootstrap server.")
+                .valueRequired("host:port")
+                .build();
     }
 
     @Override
     public void configure(Binder binder) {
         BQCoreModule.extend(binder)
-                .setDefaultCommand(KafkaConsumerCommand.class)
+                .addOption(bootstrapOption())
+                .mapConfigPath(BOOTSTRAP_SERVER_OPT, "kafkaclient.clusters." + DEFAULT_CLUSTER_NAME)
                 .addOption(verboseOption())
-                .mapConfigPath(VERBOSE_OPT, "log.loggers.org.apache.kafka.level")
-                .mapConfigPath(VERBOSE_OPT, "log.loggers.io.bootique.level");
+                .mapConfigResource(VERBOSE_OPT, "classpath:verbose.yml")
+                .setDefaultCommand(KafkaConsumerCommand.class);
 
         BQCoreModule.extend(binder)
                 .setLogLevel("org.apache.kafka", Level.WARNING)
