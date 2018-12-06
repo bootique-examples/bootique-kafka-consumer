@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>io.bootique.parent</groupId>
 		<artifactId>bootique-parent</artifactId>
-		<version>0.12</version>
+		<version>0.13</version>
 	</parent>
 
 	<groupId>io.bootique.example</groupId>
@@ -24,7 +24,7 @@
 			<dependency>
 				<groupId>io.bootique.bom</groupId>
 				<artifactId>bootique-bom</artifactId>
-				<version>0.22</version>
+				<version>1.0.RC1</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
@@ -33,7 +33,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>io.bootique.kafka.client</groupId>
+			<groupId>io.bootique.kafka</groupId>
 			<artifactId>bootique-kafka-client</artifactId>
 		</dependency>
 		<dependency>
