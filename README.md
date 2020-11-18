@@ -25,7 +25,7 @@ Here is how to build it:
 Now you can check the options available in your app:
 
     NAME
-          bootique-kafka-consumer-0.0.1-SNAPSHOT.jar
+          bootique-kafka-consumer-2.0.jar
     
     OPTIONS
           -b host:port, --bootstrap=host:port
@@ -56,7 +56,7 @@ Run Zookeeper and Kafka broker both on localhost from Kafka root directory:
 
 Run the consumer:
 
-    java -jar target/bootique-kafka-consumer-0.0.1-SNAPSHOT.jar --bootstrap=localhost:9092 --topic=topic --verbose
+    java -jar target/bootique-kafka-consumer-2.0.jar --bootstrap=localhost:9092 --topic=topic --verbose
 
 Run kafka-verifiable-producer.sh script to write a bunch of string data to a topic from Kafka root directory:
     
