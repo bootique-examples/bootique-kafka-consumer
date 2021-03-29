@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/bootique-examples/bootique-kafka-consumer.svg)](https://travis-ci.org/bootique-examples/bootique-kafka-consumer)
+[![verify](https://github.com/bootique-examples/bootique-kafka-consumer/actions/workflows/verify.yml/badge.svg)](https://github.com/bootique-examples/bootique-kafka-consumer/actions/workflows/verify.yml)
 
 # bootique-kafka-consumer
 
