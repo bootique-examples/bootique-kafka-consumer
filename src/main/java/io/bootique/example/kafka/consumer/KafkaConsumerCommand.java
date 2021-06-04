@@ -1,7 +1,5 @@
 package io.bootique.example.kafka.consumer;
 
-import com.google.inject.Inject;
-import com.google.inject.Provider;
 import io.bootique.kafka.client.consumer.KafkaConsumerFactory;
 import io.bootique.kafka.client.consumer.KafkaConsumerRunner;
 import io.bootique.meta.application.CommandMetadata;
@@ -15,6 +13,8 @@ import org.apache.kafka.common.errors.WakeupException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Provider;
 import java.time.Duration;
 import java.util.Collection;
 

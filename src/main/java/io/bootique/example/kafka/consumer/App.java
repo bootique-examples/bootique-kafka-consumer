@@ -1,9 +1,9 @@
 package io.bootique.example.kafka.consumer;
 
-import com.google.inject.Binder;
-import com.google.inject.Module;
 import io.bootique.BQCoreModule;
 import io.bootique.Bootique;
+import io.bootique.di.BQModule;
+import io.bootique.di.Binder;
 import io.bootique.meta.application.OptionMetadata;
 
 import java.util.logging.Level;
@@ -11,7 +11,7 @@ import java.util.logging.Level;
 /**
  * Main app class.
  */
-public class App implements Module {
+public class App implements BQModule {
 
     static final String DEFAULT_CLUSTER_NAME = "default_cluster";
     private static final String BOOTSTRAP_SERVER_OPT = "bootstrap";
